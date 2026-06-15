@@ -1,14 +1,151 @@
-# Get input from user
+import json
 
-year = int(input("Enter a year: "))
+FILE_NAME = "library.json"
 
-# Check if it's a leap year
+# Load books from file
+def load_books():
+    try:
+        with open(FILE_NAME, "r") as file:
+            return json.load(file)
+    except:
+        return {}
 
-if (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0):
+# Save books to file
+def save_books(books):
+    with open(FILE_NAME, "w") as file:
+        json.dump(books, file, indent=4)
 
-    print(f"{year} is a leap year.")
+# Add Book
+def add_book():
+    books = load_books()
 
-else:
+    book_id = input("Enter Book ID: ")
+    title = input("Enter Book Title: ")
+    author = input("Enter Author Name: ")
 
-    print(f"{year} is not a leap year.")
+    books[book_id] = {
+        "Title": title,
+        "Author": author,
+        "Status": "Available"
+    }
 
+    save_books(books)
+    print("Book Added Successfully!")
+
+# Issue Book
+def issue_book():
+    books = load_books()
+
+    book_id = input("Enter Book ID to Issue: ")
+
+    if book_id in books:
+        if books[book_id]["Status"] == "Available":
+            books[book_id]["Status"] = "Issued"
+            save_books(books)
+            print("Book Issued Successfully!")
+        else:
+            print("Book Already Issued!")
+    else:
+        print("Book Not Found!")
+
+# Return Book
+def return_book():
+    books = load_books()
+
+    book_id = input("Enter Book ID to Return: ")
+
+    if book_id in books:
+        books[book_id]["Status"] = "Available"
+        save_books(books)
+        print("Book Returned Successfully!")
+    else:
+        print("Book Not Found!")
+
+# Search Book
+def search_book():
+    books = load_books()
+
+    book_id = input("Enter Book ID: ")
+
+    if book_id in books:
+        print("\nBook Details")
+        print("ID:", book_id)
+        print("Title:", books[book_id]["Title"])
+        print("Author:", books[book_id]["Author"])
+        print("Status:", books[book_id]["Status"])
+    else:
+        print("Book Not Found!")
+
+# View All Books
+def view_books():
+    books = load_books()
+
+    if not books:
+        print("No Books Available!")
+        return
+
+    print("\n===== BOOK LIST =====")
+
+    for book_id, details in books.items():
+        print("----------------------------")
+        print("Book ID :", book_id)
+        print("Title   :", details["Title"])
+        print("Author  :", details["Author"])
+        print("Status  :", details["Status"])
+
+# Generate Report
+def generate_report():
+    books = load_books()
+
+    total = len(books)
+    issued = 0
+    available = 0
+
+    for book in books.values():
+        if book["Status"] == "Issued":
+            issued += 1
+        else:
+            available += 1
+
+    print("\n===== LIBRARY REPORT =====")
+    print("Total Books     :", total)
+    print("Issued Books    :", issued)
+    print("Available Books :", available)
+
+# Main Menu
+while True:
+    print("\n===== LIBRARY MANAGEMENT SYSTEM =====")
+    print("1. Add Book")
+    print("2. Issue Book")
+    print("3. Return Book")
+    print("4. Search Book")
+    print("5. View Books")
+    print("6. Generate Report")
+    print("7. Exit")
+
+    choice = input("Enter Choice: ")
+
+    if choice == "1":
+        add_book()
+
+    elif choice == "2":
+        issue_book()
+
+    elif choice == "3":
+        return_book()
+
+    elif choice == "4":
+        search_book()
+
+    elif choice == "5":
+        view_books()
+
+    elif choice == "6":
+        generate_report()
+
+    elif choice == "7":
+        print("Thank You!")
+        break
+
+    else:
+        print("Invalid Choice!")
