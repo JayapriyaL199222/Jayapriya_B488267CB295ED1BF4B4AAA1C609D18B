@@ -1,93 +1,40 @@
-import os
-
 class BankAccount:
 
-    def __init__(self, acc_no, name, balance=0):
+    def __init__(self, acc_no, name):
         self.acc_no = acc_no
         self.name = name
-        self.balance = balance
+        self.balance = 0
         self.transactions = []
 
     def deposit(self, amount):
         self.balance += amount
-        self.transactions.append(f"Deposited ₹{amount}")
+        self.transactions.append("Deposited ₹" + str(amount))
         print("Amount Deposited Successfully!")
 
     def withdraw(self, amount):
         if amount <= self.balance:
             self.balance -= amount
-            self.transactions.append(f"Withdrawn ₹{amount}")
+            self.transactions.append("Withdrawn ₹" + str(amount))
             print("Amount Withdrawn Successfully!")
         else:
             print("Insufficient Balance!")
 
     def show_balance(self):
-        print(f"\nAccount Number : {self.acc_no}")
-        print(f"Account Holder : {self.name}")
-        print(f"Balance : ₹{self.balance}")
+        print("\nAccount Number :", self.acc_no)
+        print("Account Holder :", self.name)
+        print("Balance :", self.balance)
 
     def show_transactions(self):
         print("\nTransaction History")
-        print("--------------------")
+        print("-------------------")
 
-        if not self.transactions:
+        if len(self.transactions) == 0:
             print("No Transactions Found!")
         else:
             for t in self.transactions:
                 print(t)
 
-    def save_account(self):
-        with open("accounts.txt", "a") as file:
-            file.write(
-                f"{self.acc_no},{self.name},{self.balance}\n"
-            )
-
 accounts = {}
-
-def create_account():
-    acc_no = input("Enter Account Number: ")
-    name = input("Enter Account Holder Name: ")
-
-    account = BankAccount(acc_no, name)
-
-    accounts[acc_no] = account
-    account.save_account()
-
-    print("Account Created Successfully!")
-
-def deposit_money():
-    acc_no = input("Enter Account Number: ")
-
-    if acc_no in accounts:
-        amount = float(input("Enter Amount: "))
-        accounts[acc_no].deposit(amount)
-    else:
-        print("Account Not Found!")
-
-def withdraw_money():
-    acc_no = input("Enter Account Number: ")
-
-    if acc_no in accounts:
-        amount = float(input("Enter Amount: "))
-        accounts[acc_no].withdraw(amount)
-    else:
-        print("Account Not Found!")
-
-def balance_enquiry():
-    acc_no = input("Enter Account Number: ")
-
-    if acc_no in accounts:
-        accounts[acc_no].show_balance()
-    else:
-        print("Account Not Found!")
-
-def transaction_history():
-    acc_no = input("Enter Account Number: ")
-
-    if acc_no in accounts:
-        accounts[acc_no].show_transactions()
-    else:
-        print("Account Not Found!")
 
 while True:
 
@@ -102,19 +49,46 @@ while True:
     choice = input("Enter Choice: ")
 
     if choice == "1":
-        create_account()
+        acc_no = input("Enter Account Number: ")
+        name = input("Enter Account Holder Name: ")
+
+        accounts[acc_no] = BankAccount(acc_no, name)
+
+        print("Account Created Successfully!")
 
     elif choice == "2":
-        deposit_money()
+        acc_no = input("Enter Account Number: ")
+
+        if acc_no in accounts:
+            amount = float(input("Enter Amount: "))
+            accounts[acc_no].deposit(amount)
+        else:
+            print("Account Not Found!")
 
     elif choice == "3":
-        withdraw_money()
+        acc_no = input("Enter Account Number: ")
+
+        if acc_no in accounts:
+            amount = float(input("Enter Amount: "))
+            accounts[acc_no].withdraw(amount)
+        else:
+            print("Account Not Found!")
 
     elif choice == "4":
-        balance_enquiry()
+        acc_no = input("Enter Account Number: ")
+
+        if acc_no in accounts:
+            accounts[acc_no].show_balance()
+        else:
+            print("Account Not Found!")
 
     elif choice == "5":
-        transaction_history()
+        acc_no = input("Enter Account Number: ")
+
+        if acc_no in accounts:
+            accounts[acc_no].show_transactions()
+        else:
+            print("Account Not Found!")
 
     elif choice == "6":
         print("Thank You!")
