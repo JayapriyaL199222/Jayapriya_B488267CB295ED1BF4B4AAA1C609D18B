@@ -1,0 +1,30 @@
+Smart Parking System
+
+total_slots = 10
+available_slots = 7
+
+print("===== Smart Parking System =====")
+print("Total Parking Slots :", total_slots)
+print("Available Slots :", available_slots)
+
+vehicle = input("Enter Vehicle Number: ")
+
+if available_slots > 0:
+    print("Parking Slot Allocated")
+    available_slots -= 1
+    print("Remaining Slots :", available_slots)
+
+    hours = int(input("Enter Parking Hours: "))
+    bill = hours * 20
+
+    print("\n----- Parking Bill -----")
+    print("Vehicle Number :", vehicle)
+    print("Parking Hours :", hours)
+    print("Total Bill : ₹", bill)
+
+    print("\nVehicle Exited Successfully")
+    available_slots += 1
+    print("Updated Available Slots :", available_slots)
+
+else:
+    print("Sorry! No Parking Slots Available.")
